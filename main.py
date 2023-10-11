@@ -1,16 +1,18 @@
-# This is a sample Python script.
+from aiogram.utils import executor
+import logging
+from config import dp, bot, Admins, Director
+from handlers.start import register_start
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+# ===========================================================================
+async def on_startup(_):
+    for i in Admins:
+        await bot.send_message(chat_id=i, text="Бот запущен!")
+    # await bot.send_message(chat_id=Director[0], text="Бот запущен!", reply_markup=buttons.start_director_markup)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+register_start(dp)
 
-
-# Press the green button in the gutter to run the script.
+# ===========================================================================
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    logging.basicConfig(level=logging.INFO)
+    executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
