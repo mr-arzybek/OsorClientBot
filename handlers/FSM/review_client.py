@@ -64,27 +64,25 @@ async def load_submit(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         if message.text.lower() == 'да':
             if data['city'] == 'Бишкек':
-                # Запись в базу данных!
-                await message.answer('Готово!', reply_markup=buttons.)
-                await state.finish()
+                pass
+
 
             elif data['city'] == 'ОШ':
-                # Запись в базу данных!
-                await message.answer('Готово!', reply_markup=buttons.)
-                await state.finish()
+                pass
+
 
             elif data['city'] == 'Москва 1-филиал':
-                # Запись в базу данных!
-                await message.answer('Готово!', reply_markup=buttons.)
-                await state.finish()
+                pass
+
 
             elif data['city'] == 'Москва 2-филиал':
-                # Запись в базу данных!
-                await message.answer('Готово!', reply_markup=buttons.)
-                await state.finish()
+                pass
+
+            await message.answer('Готово!')
+            await state.finish()
 
         elif message.text.lower() == 'нет':
-            await message.answer('Хорошо, отменено', reply_markup=buttons.)
+            await message.answer('Хорошо, отменено')
             await state.finish()
 
 
@@ -92,7 +90,7 @@ async def cancel_reg(message: types.Message, state: FSMContext):
     current_state = await state.get_state()
     if current_state is not None:
         await state.finish()
-        await message.answer('Отменено!', reply_markup=buttons.)
+        await message.answer('Отменено!')
 
 
 # =======================================================================================================================

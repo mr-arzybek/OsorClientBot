@@ -1,8 +1,8 @@
 from aiogram.utils import executor
 import logging
 from config import dp, bot, Admins
-from handlers.commands import register_start
-from handlers.FSM.review_client import register_review
+from handlers import commands
+from handlers.FSM import review_client, send_to_tg_channel
 
 
 # ===========================================================================
@@ -12,9 +12,10 @@ async def on_startup(_):
     # await bot.send_message(chat_id=Director[0], text="Бот запущен!", reply_markup=buttons.start_director_markup)
 
 
-register_start(dp)
+commands.register_start(dp)
 
-register_review(dp)
+review_client.register_review(dp)
+send_to_tg_channel.register_send_to_channel(dp)
 
 # ===========================================================================
 if __name__ == '__main__':
