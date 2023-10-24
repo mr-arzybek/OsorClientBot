@@ -6,6 +6,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 storage = MemoryStorage()
 
 TOKEN = config('TOKEN')
+CHANNEL_ID = int(config('CHANNEL_ID'))
 
 Admins = [995712956, 908379438]
 

@@ -4,7 +4,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher.filters import Text
 
-from config import Admins, bot
+from config import Admins, bot, CHANNEL_ID
 from keyboards import buttons
 
 
@@ -17,6 +17,8 @@ class SendToChannelFSM(StatesGroup):
     photos = State()
     submit = State()
 
+
+media_group = types.MediaGroup()
 
 async def fsm_start(message: types.Message):
     if message.from_user.id in Admins:
@@ -54,27 +56,25 @@ async def load_photos(message: types.Message, state: FSMContext):
 # Обработчик команды /done для завершения
 async def finish_load_photos(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        # Отправляем все фотографии пользователю
+
         for i in data['photos']:
-            media = [types.InputMediaPhoto(i)]
-            if i in media:
+            if i in media_group:
                 pass
-            else:
-                media.append(types.InputMediaPhoto(i))
+            media_group.attach_photo(types.InputMediaPhoto(i))
 
-            # media.append(types.InputMessageContent(caption=f"{data['title_for_channel']}\n\n{data['text_for_channel']}"))
 
-        print(data['photos'])
-        await bot.send_media_group(chat_id=message.from_user.id, media=media)
+        print(media_group)
+        await bot.send_media_group(chat_id=message.from_user.id, media=media_group)
+        await message.answer("Всё правильно?", reply_markup=buttons.submit_markup)
         await SendToChannelFSM.next()
 
 
 async def load_submit(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         if message.text.lower() == 'да':
-            channel_id = -1002020396482
-            await bot.send_photo(chat_id=channel_id, photo=data["photo_for_channel"],
-                                 caption=f"{data['title_for_channel']}\n\n{data['text_for_channel']}")
+            channel_id = CHANNEL_ID
+            await bot.send_media_group(chat_id=channel_id, media=media_group)
+            # await bot.send_message(chat_id=channel_id, text=f"{data['title_for_channel']}\n\n{data['text_for_channel']}")
             await state.finish()
         else:
             await message.answer("Отмена!")
