@@ -2,8 +2,7 @@ from aiogram.utils import executor
 import logging
 from config import dp, bot, Admins, Director
 from handlers.start import register_start
-from handlers.FSM import review_client, send_to_tg_channel
-
+from handlers.FSM import review_client, send_to_tg_channel, order
 
 # ===========================================================================
 async def on_startup(_):
@@ -15,6 +14,7 @@ async def on_startup(_):
 register_start(dp)
 review_client.register_review(dp)
 send_to_tg_channel.register_send_to_channel(dp)
+order.register_order(dp)
 
 # ===========================================================================
 if __name__ == '__main__':
