@@ -3,6 +3,7 @@ import logging
 from config import dp, bot, Admins
 from handlers.commands import register_start
 from handlers.FSM.review_client import register_review
+from handlers.FSM import all_products
 from keyboards import buttons
 
 # ==================================================================================================================
@@ -19,6 +20,8 @@ async def on_shutdown(_):
 register_start(dp)
 
 register_review(dp)
+
+all_products.register_all_products(dp)
 
 # ===========================================================================
 if __name__ == "__main__":

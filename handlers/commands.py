@@ -24,9 +24,6 @@ async def about(message: types.Message):
 
 
 # ==================================================================================================================
-async def all_products(message: types.Message):
-    await message.answer('Вы зашли ко всем товарам! \n'
-                         'Снизу выберите категорию! ⬇️', reply_markup=buttons.all_categories)
 
 
 async def price_categories(message: types.Message):
@@ -51,7 +48,6 @@ def register_start(dp: Dispatcher):
     dp.register_message_handler(back, commands=['<назад'])
     dp.register_message_handler(about, commands=['О_нас!', 'about'])
     # ======================================================================
-    dp.register_message_handler(all_products, commands=['Товары'])
     dp.register_message_handler(order_products, commands=['Заказать'])
     dp.register_message_handler(try_on, commands=['Примерить'])
 

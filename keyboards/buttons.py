@@ -21,27 +21,26 @@ yesno = ReplyKeyboardMarkup(
                      cancel_button)
 
 # ======================================================================================================================
-start = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=2)
+start = ReplyKeyboardMarkup(resize_keyboard=True,
+                            one_time_keyboard=True,
+                            row_width=2).add(KeyboardButton('/Товары'),
+                                             KeyboardButton('/Написать_отзыв'),
+                                             KeyboardButton('/Заказать'),
+                                             KeyboardButton('/Примерить'),
+                                             KeyboardButton('/О_нас!'))
 
-all_products = KeyboardButton('/Товары')
-review = KeyboardButton('/Написать_отзыв')
-order = KeyboardButton('/Заказать')
-try_on = KeyboardButton('/Примерить')
-about = KeyboardButton('/О_нас!')
-
-start.add(all_products, order, try_on, review, about)
 
 # ======================================================================================================================
 
-OrderWhereCategory = ReplyKeyboardMarkup(
-    resize_keyboard=True,
-    one_time_keyboard=True,
-    row_width=2).add(KeyboardButton('/Обувь'),
-                     KeyboardButton('/Нижнее_белье'),
-                     KeyboardButton('/Акссесуары'),
-                     KeyboardButton('/Верхняя_одежда'),
-                     KeyboardButton('/Штаны'),
-                     back)
+OrderWhereCategory = ReplyKeyboardMarkup(resize_keyboard=True,
+                                         one_time_keyboard=True,
+                                         row_width=2).add(KeyboardButton('/Обувь'),
+                                                          KeyboardButton('/Нижнее_белье'),
+                                                          KeyboardButton('/Акссесуары'),
+                                                          KeyboardButton('/Верхняя_одежда'),
+                                                          KeyboardButton('/Штаны'),
+                                                          back)
+
 
 city_markup = ReplyKeyboardMarkup(resize_keyboard=True,
                                   one_time_keyboard=True,
@@ -53,16 +52,15 @@ city_markup = ReplyKeyboardMarkup(resize_keyboard=True,
 
 # ======================================================================================================================
 
-all_categories = ReplyKeyboardMarkup(
-    resize_keyboard=True,
-    one_time_keyboard=True,
-    row_width=2).add(KeyboardButton('/Обувь'),
-                     KeyboardButton('/Нижнее_белье'),
-                     KeyboardButton('/Акссесуары'),
-                     KeyboardButton('/Верхняя_одежда'),
-                     KeyboardButton('/Штаны'),
-                     KeyboardButton('/Все_товары!'),
-                     back)
+all_categories = ReplyKeyboardMarkup(resize_keyboard=True,
+                                     one_time_keyboard=True,
+                                     row_width=2).add(KeyboardButton('/Обувь'),
+                                                      KeyboardButton('/Нижнее_белье'),
+                                                      KeyboardButton('/Акссесуары'),
+                                                      KeyboardButton('/Верхняя_одежда'),
+                                                      KeyboardButton('/Штаны'),
+                                                      KeyboardButton('/Все_товары!'),
+                                                      back)
 
 price_categories = ReplyKeyboardMarkup(resize_keyboard=True,
                                        one_time_keyboard=True,
@@ -71,5 +69,5 @@ price_categories = ReplyKeyboardMarkup(resize_keyboard=True,
                                              KeyboardButton('2000_4000сом'),
                                              KeyboardButton('4000_6000сом'),
                                              KeyboardButton('+6000сом'),
-                                             KeyboardButton("Все_цены!"))
+                                             KeyboardButton("/Все_цены!"))
 # ======================================================================================================================
