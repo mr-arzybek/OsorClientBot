@@ -5,7 +5,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 
 from keyboards import buttons
 from datetime import datetime
-
+from db import sql_queris
 
 # =======================================================================================================================
 
@@ -85,30 +85,14 @@ async def load_photo(message: types.Message, state: FSMContext):
 
 
 async def load_submit(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        if message.text.lower() == "да":
-            if data['city'] == 'Бишкек':
-                # Запись в базу данных!
-                pass
+    if message.text.lower() == "да":
+        await sql_queris.INSERT_INTO_TABLE_REVIEW(state)
+        await message.answer('Готово!', reply_markup=buttons.start)
+        await state.finish()
 
-            elif data['city'] == 'ОШ':
-                # Запись в базу данных!
-                pass
-
-            elif data['city'] == 'Москва 1-филиал':
-                # Запись в базу данных!
-                pass
-
-            elif data['city'] == 'Москва 2-филиал':
-                # Запись в базу данных!
-                pass
-
-            await message.answer('Готово!', reply_markup=buttons.start)
-            await state.finish()
-
-        elif message.text.lower() == 'нет':
-            await message.answer('Хорошо, отменено', reply_markup=buttons.start)
-            await state.finish()
+    elif message.text.lower() == 'нет':
+        await message.answer('Хорошо, отменено', reply_markup=buttons.start)
+        await state.finish()
 
 
 async def cancel_reg(message: types.Message, state: FSMContext):

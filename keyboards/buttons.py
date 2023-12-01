@@ -23,12 +23,16 @@ yesno = ReplyKeyboardMarkup(
 # ======================================================================================================================
 start = ReplyKeyboardMarkup(resize_keyboard=True,
                             one_time_keyboard=True,
-                            row_width=2).add(KeyboardButton('/Товары'),
+                            row_width=2).add(KeyboardButton('/Товары!'),
                                              KeyboardButton('/Написать_отзыв'),
                                              KeyboardButton('/Заказать'),
                                              KeyboardButton('/Примерить'),
                                              KeyboardButton('/О_нас!'))
 
+startForAdmins = ReplyKeyboardMarkup(resize_keyboard=True,
+                            one_time_keyboard=True,
+                            row_width=2).add(KeyboardButton('/Клиентские_кнопки!'),
+                                             KeyboardButton('/Рассылка'))
 
 
 finish_load_photos = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add \
@@ -55,10 +59,6 @@ city_markup = ReplyKeyboardMarkup(resize_keyboard=True,
                                         KeyboardButton('Москва 1-филиал'))
 
 # ======================================================================================================================
-all_products = ReplyKeyboardMarkup(resize_keyboard=True,
-                                     one_time_keyboard=True,
-                                     row_width=2).add(KeyboardButton("/Товары_Бишкек!"))
-
 
 all_categories = ReplyKeyboardMarkup(resize_keyboard=True,
                                      one_time_keyboard=True,
@@ -67,7 +67,6 @@ all_categories = ReplyKeyboardMarkup(resize_keyboard=True,
                                                       KeyboardButton('Акссесуары'),
                                                       KeyboardButton('Верхняя_одежда'),
                                                       KeyboardButton('Штаны'),
-                                                      KeyboardButton('Все_товары!'),
                                                       cancel_button)
 
 price_categories = ReplyKeyboardMarkup(resize_keyboard=True,

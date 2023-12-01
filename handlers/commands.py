@@ -2,15 +2,6 @@ from aiogram import types, Dispatcher
 from keyboards import buttons
 
 
-async def start_command(message: types.Message):
-    await message.answer("Здравствуйте! Добро пожаловать в наш магазин модной одежды"
-                         ", и я здесь, чтобы сделать ваше шопинг-путешествие незабываемым."
-                         "С моей помощью вы сможете легко и удобно находить и выбирать стильные наряды. "
-                         "Я предоставлю вам информацию о последних трендах, лучшие предложения и советы по стилю."
-                         "Не стесняйтесь задавать мне вопросы, и я всегда готов помочь вам с выбором. Давайте начнем, "
-                         "что вас интересует сегодня?", reply_markup=buttons.start)
-
-
 async def support(message: types.Message):
     await message.answer("Здесь будет контакты поддержки!")
 
@@ -44,7 +35,8 @@ async def shoes(message: types.Message):
     await message.answer(f'Вы зашли в категорию "{message.text[1::]}"! \n'
                          'Здесь будут все товары этой категории! ⬇'
                          '\n'
-                         'В котором можно будет заполнить данные товара и свои данные(ФИО, номер телефона и т.д)', reply_markup=buttons.all_categories)
+                         'В котором можно будет заполнить данные товара и свои данные(ФИО, номер телефона и т.д)',
+                         reply_markup=buttons.all_categories)
 
 
 async def price(message: types.Message):
@@ -61,20 +53,25 @@ async def all_price(message: types.Message):
 
 
 async def all_products(message: types.Message):
-    await message.answer("Выберите филиал?", reply_markup=buttons.all_products)
+    await message.answer("Выберите филиал 📍", reply_markup=buttons.all_products)
+
+
+async def ButtonClient(message: types.Message):
+    await message.answer('Вы перешли к клиентским кнопкам!', reply_markup=buttons.start)
+
 # ==================================================================================================================
 
 def register_start(dp: Dispatcher):
-    dp.register_message_handler(start_command, commands=['start'])
     dp.register_message_handler(back, commands=['<назад'])
     dp.register_message_handler(about, commands=['О_нас!', 'about'])
     # ======================================================================
     dp.register_message_handler(order_products, commands=['Заказать'])
     dp.register_message_handler(try_on, commands=['Примерить'])
     dp.register_message_handler(shoes, commands=['Обувь', 'Нижнее_белье', 'Акссесуары', 'Верхняя_одежда', 'Штаны'])
-
     # ======================================================================
     dp.register_message_handler(all_products, commands=['Товары'])
     dp.register_message_handler(price_categories, commands=['Все_товары!'])
     dp.register_message_handler(all_price, commands=['Все_цены!'])
     dp.register_message_handler(price, commands=[''])
+    # ======================================================================
+    dp.register_message_handler(ButtonClient, commands=['Клиентские_кнопки!'])
