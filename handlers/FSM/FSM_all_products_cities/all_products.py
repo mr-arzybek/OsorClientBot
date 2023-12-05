@@ -8,7 +8,6 @@ from config import bot, Admins, Director, POSTGRES_URL
 from keyboards import buttons
 from aiogram.types import InputFile
 
-# Подключение к базе данных PostgreSQL
 async def get_conn():
     conn = await asyncpg.connect(user='postgres', password='123',
                                  database='osor_tg_bot', host='localhost')
@@ -39,17 +38,13 @@ async def load_category(message: types.Message, state: FSMContext):
     data = await state.get_data()
     city = data.get("city")
 
-    if city is None:
-        await message.answer("Пожалуйста, выберите город сначала.")
-        return
-
     try:
         conn = await get_conn()
         categories = await conn.fetch(
             "SELECT * FROM products_coming WHERE category = $1 AND city = $2",
             category_name, city)
     except Exception as e:
-        await message.answer(f"Произошла ошибка при выполнении SQL-запроса: {e}")
+        await message.answer(f"Ошибка SQL-запроса: {e}")
         return
     finally:
         await conn.close()
@@ -58,16 +53,20 @@ async def load_category(message: types.Message, state: FSMContext):
         await message.answer(f"Категория '{category_name}' в городе '{city}' не найдена.")
         return
 
-    else:
-        for category in categories:
-            await message.answer_photo(photo=category['photo'], caption=f"Товар: {category['name_']}\n"
-                                                                        f"Информация о товаре: {category['info_product']}\n"
-                                                                        f"Дата прихода: {category['date_coming']}\n"
-                                                                        f"Цена: {category['price']}\n"
-                                                                        f"Город: {category['city']}\n"
-                                                                        f"Категория: {category['category']}\n"
-                                                                        f"Артикул: {category['articul']}\n"
-                                                                        f"Количество: {category['quantity']}\n")
+    for category in categories:
+        print(category['photo'])
+        photo_id = category['photo']
+        await bot.send_photo(chat_id=message.from_user.id,
+                             photo=photo_id,
+                             caption=f"Товар: {category['name_']}\n"
+                                     f"Информация о товаре: {category['info_product']}\n"
+                                     f"Дата прихода: {category['date_coming']}\n"
+                                     f"Цена: {category['price']}\n"
+                                     f"Город: {category['city']}\n"
+                                     f"Категория: {category['category']}\n"
+                                     f"Артикул: {category['articul']}\n"
+                                     f"Количество: {category['quantity']}")
+
 
 
 async def cancel_reg(message: types.Message, state: FSMContext):

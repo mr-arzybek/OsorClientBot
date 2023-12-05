@@ -55,7 +55,7 @@ async def load_city(message: types.Message, state: FSMContext):
 
 async def submit_photo(message: types.Message, state: FSMContext):
     if message.text == "Да":
-        await review_fsm.next
+        await review_fsm.next()
         await message.answer("Отправьте фотку товара")
     elif message.text == 'Нет':
         async with state.proxy() as data:
@@ -64,9 +64,13 @@ async def submit_photo(message: types.Message, state: FSMContext):
                                  f"Название товара: {data['name']}\n"
                                  f"Отзыв о товаре: {data['review']}\n"
                                  f"Город: {data['city']}", )
-        await review_fsm.submit.set()
-        await message.answer("Все верно?", reply_markup=buttons.submit_markup)
+            await review_fsm.submit.set()
+            await message.answer("Все верно?", reply_markup=buttons.submit_markup)
+    else:
+        await message.answer("Пожалуйста, выберите Да или Нет.")
 
+
+# ...
 
 async def load_photo(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -80,19 +84,43 @@ async def load_photo(message: types.Message, state: FSMContext):
                     f"Отзыв о товаре: {data['review']}\n"
                     f"Город: {data['city']}",
         )
-    await review_fsm.next()
-    await message.answer("Все верно?", reply_markup=buttons.submit_markup)
+        await review_fsm.next()
+        await message.answer("Все верно?", reply_markup=buttons.submit_markup)
 
+
+# ...
 
 async def load_submit(message: types.Message, state: FSMContext):
     if message.text.lower() == "да":
-        await sql_queris.INSERT_INTO_TABLE_REVIEW(state)
+        async with state.proxy() as data:
+            if 'photo' in data:
+                # Ваша логика обработки с фотографией
+                values = (
+                    data['name'],
+                    data['articule'],
+                    data['review'],
+                    data['city'],
+                    data['photo']
+                )
+            else:
+                # Ваша логика обработки без фотографии
+                values = (
+                    data['name'],
+                    data['articule'],
+                    data['review'],
+                    data['city'],
+                    None  # или любое другое значение, которое указывает на отсутствие фотографии
+                )
+
+            await sql_queris.execute_query(sql_queris.INSERT_INTO_TABLE_REVIEW, values)
         await message.answer('Готово!', reply_markup=buttons.start)
         await state.finish()
-
     elif message.text.lower() == 'нет':
         await message.answer('Хорошо, отменено', reply_markup=buttons.start)
         await state.finish()
+    else:
+        await message.answer("Пожалуйста, выберите Да или Нет.")
+
 
 
 async def cancel_reg(message: types.Message, state: FSMContext):

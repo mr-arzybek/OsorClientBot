@@ -1,19 +1,32 @@
+import sqlite3
+
+DATABASE_NAME = 'db/review.db'  # Замените на реальное имя вашей базы данных
+
 CREATE_TABLE_REVIEW = """
     CREATE TABLE IF NOT EXISTS reviews
     (id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name_product VARCHAR(255),
-    articul VARCHAR(255),
+    name VARCHAR(255),
+    articule TEXT,
     info VARCHAR(255),
     city VARCHAR(255) NULL,
-    photo_check TEXT,
-    
-    )
+    photo TEXT)
 """
 
 INSERT_INTO_TABLE_REVIEW = """
-    INSERT INTO reviews(name_product, arcticul, info, city, photo_check) VALUES (?, ?, ?, ?, ?)
+    INSERT INTO reviews(name, articule, info, city, photo) VALUES (?, ?, ?, ?, ?)
 """
 
 SELECT_CHECKS_REVIEWS = """
     SELECT * FROM reviews
 """
+
+
+async def execute_query(query, values):
+    connection = sqlite3.connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    cursor.execute(CREATE_TABLE_REVIEW)
+
+    cursor.execute(query, values)
+    connection.commit()
+    connection.close()

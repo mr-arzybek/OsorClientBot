@@ -32,7 +32,8 @@ start = ReplyKeyboardMarkup(resize_keyboard=True,
 startForAdmins = ReplyKeyboardMarkup(resize_keyboard=True,
                             one_time_keyboard=True,
                             row_width=2).add(KeyboardButton('/Клиентские_кнопки!'),
-                                             KeyboardButton('/Рассылка'))
+                                             KeyboardButton('/Рассылка'),
+                                             KeyboardButton('/Все_отзывы!'))
 
 
 finish_load_photos = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add \

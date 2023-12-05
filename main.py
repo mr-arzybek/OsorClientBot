@@ -8,12 +8,14 @@ from handlers.commands import register_start
 from handlers.FSM.FSM_all_products_cities import all_products
 from keyboards import buttons
 from config import data_b
+from db import db_orm
 
 
 # ==================================================================================================================
 async def on_startup(_):
     for Admin in Admins:
         await bot.send_message(chat_id=Admin, text="Бот запущен!", reply_markup=buttons.startForAdmins)
+        await db_orm.sql_create()
         await data_b.connect()
 
 
@@ -23,12 +25,11 @@ async def on_shutdown(_):
 
 
 # ==================================================================================================================
-
+db_orm.sql_get_ORM(dp)
 review_client.register_review(dp)
 send_to_tg_channel.register_send_to_channel(dp)
 
 all_products.register_all_products(dp)
-
 register_start(dp)
 # ===========================================================================
 if __name__ == "__main__":
