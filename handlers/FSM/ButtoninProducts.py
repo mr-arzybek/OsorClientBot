@@ -4,6 +4,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from config import bot, CHANNEL_ID
 import os
+from keyboards import buttons
 
 # Добавим константу для количества товаров, выводимых изначально
 PRODUCTS_PER_PAGE = 7
@@ -59,7 +60,7 @@ async def all_products(message: types.Message, state: FSMContext):
 
 
     if len(products) == PRODUCTS_PER_PAGE:
-        await message.answer("Выберите действие:", reply_markup=InlineKeyboardMarkup().add(
+        await message.answer("Хотите посмотреть остальные товары?:", reply_markup=InlineKeyboardMarkup().add(
             InlineKeyboardButton("Еще", callback_data="load_more")
         ))
 
@@ -93,26 +94,43 @@ async def complete_send_products(call: types.CallbackQuery):
 
         try:
             with open(photo_path, 'rb') as photo:
-                await bot.send_photo(chat_id=CHANNEL_ID,photo=photo, caption=f"Товар: {product[1]}\n"
-                                                                f"Информация о товаре: {product[2]}\n"
-                                                                f"Цена: {product[4]}\n"
-                                                                f"Город: {product[5]}\n"
-                                                                f"Категория: {product[6]}\n"
-                                                                f"Артикул: {product[7]}\n",
-                                           reply_markup=InlineKeyboardMarkup().add(
-                                               InlineKeyboardButton(f"В канал! {product[0]}",
-                                                                    callback_data=f"Разослать {product[0]}")))
+                sent_message = await bot.send_photo(chat_id=CHANNEL_ID, photo=photo, caption=f"Товар: {product[1]}\n"
+                                                                                             f"Информация о товаре: {product[2]}\n"
+                                                                                             f"Цена: {product[4]}\n"
+                                                                                             f"Город: {product[5]}\n"
+                                                                                             f"Категория: {product[6]}\n"
+                                                                                             f"Артикул: {product[7]}\n",
+                                                    reply_markup=buttons.start)
         except Exception as e:
             print(f"Ошибка при открытии файла {photo_path}: {e}")
             continue
+
 
     await call.answer(text="Отправлено! ✅", show_alert=True)
     await bot.delete_message(call.from_user.id, call.message.message_id)
 
 
-async def load_more_products(call: types.CallbackQuery):
-    chat_counters[call.message.chat.id] += PRODUCTS_PER_PAGE
-    await all_products(call.message, await call.message.bot.get_data())
+
+async def load_more_products(call: types.CallbackQuery, state: FSMContext):
+    # Получаем текущее значение счетчика из состояния
+    data = await state.get_data()
+    counter = data.get("counter", 0)
+
+    # Увеличиваем счетчик на PRODUCTS_PER_PAGE
+    counter += PRODUCTS_PER_PAGE
+
+    # Сохраняем новое значение счетчика в состояние
+    await state.update_data(counter=counter)
+
+    # Получаем товары для отображения
+    await all_products(call.message, state)
+
+    # Добавим отладочные сообщения
+    print(f"Текущий счетчик: {counter}")
+    print(f"Отправленное сообщение: {call.message.text}")
+
+
+
 
 
 def register_button_all_products(dp: Dispatcher):

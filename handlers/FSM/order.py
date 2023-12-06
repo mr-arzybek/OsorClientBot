@@ -58,6 +58,8 @@ async def load_submit(message: types.Message, state: FSMContext):
             await bot.send_contact(chat_id=Manager,
                                    phone_number=data['contact']['phone_number'],
                                    first_name=data['contact']['first_name'])
+            await bot.send_message(chat_id=Manager, text=f"Новый заказ!!!\n"
+                                                         "")
             await state.finish()
 
         else:
