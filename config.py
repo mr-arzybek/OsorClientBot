@@ -11,7 +11,7 @@ Director = [1738805992, ]
 CHANNEL_ID = int(config('CHANNEL_ID'))
 Admins = [995712956, 908379438, ]
 
-
+Manager = 908379438
 bot = Bot(TOKEN)
 
 dp = Dispatcher(bot=bot, storage=storage)

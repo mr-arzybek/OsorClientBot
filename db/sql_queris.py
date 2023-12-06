@@ -20,6 +20,10 @@ SELECT_CHECKS_REVIEWS = """
     SELECT * FROM reviews
 """
 
+SELECT_PRODUCT_FROM_ARTICUL = """
+    SELECT * FROM product_coming WHERE articul = $1
+
+"""
 
 async def execute_query(query, values):
     connection = sqlite3.connect(DATABASE_NAME)
