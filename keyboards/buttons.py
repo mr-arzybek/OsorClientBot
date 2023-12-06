@@ -35,6 +35,11 @@ startForAdmins = ReplyKeyboardMarkup(resize_keyboard=True,
                                              KeyboardButton('/Рассылка'),
                                              KeyboardButton('/Все_отзывы!'))
 
+send_products = ReplyKeyboardMarkup(resize_keyboard=True,
+                            one_time_keyboard=True,
+                            row_width=2).add(KeyboardButton('/Готовые_товары!'),
+                                             KeyboardButton('/Вручную!'))
+
 
 finish_load_photos = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add \
     (KeyboardButton('/Это_все_сохранить_фото'))

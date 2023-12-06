@@ -13,6 +13,9 @@ async def back(message: types.Message):
 async def about(message: types.Message):
     await message.answer('Что такое - OSOR ?! ⬇', reply_markup=buttons.start)
 
+async def send_products(message: types.Message):
+    await message.answer("Вы зашли в рассылку товаров в канал!", reply_markup=buttons.send_products)
+
 
 # ==================================================================================================================
 
@@ -72,6 +75,6 @@ def register_start(dp: Dispatcher):
     dp.register_message_handler(all_products, commands=['Товары'])
     dp.register_message_handler(price_categories, commands=['Все_товары!'])
     dp.register_message_handler(all_price, commands=['Все_цены!'])
-    dp.register_message_handler(price, commands=[''])
+    dp.register_message_handler(send_products, commands=['Рассылка'])
     # ======================================================================
     dp.register_message_handler(ButtonClient, commands=['Клиентские_кнопки!'])

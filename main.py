@@ -1,11 +1,10 @@
 from aiogram.utils import executor
 import logging
-from handlers.FSM import review_client, send_to_tg_channel
+from handlers.FSM import review_client, send_to_tg_channel, all_products, ButtoninProducts
 
 # ===========================================================================
 from config import dp, bot, Admins
 from handlers.commands import register_start
-from handlers.FSM.FSM_all_products_cities import all_products
 from keyboards import buttons
 from config import data_b
 from db import db_orm
@@ -31,6 +30,7 @@ send_to_tg_channel.register_send_to_channel(dp)
 
 all_products.register_all_products(dp)
 register_start(dp)
+ButtoninProducts.register_button_all_products(dp)
 # ===========================================================================
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

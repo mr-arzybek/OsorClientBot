@@ -55,14 +55,17 @@ async def load_photos(message: types.Message, state: FSMContext):
 # Обработчик команды /done для завершения
 async def finish_load_photos(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        last_photo = None
 
         for i in data['photos']:
             if i in media_group:
                 pass
-            media_group.attach_photo(types.InputMediaPhoto(i))
+            last_photo = types.InputMediaPhoto(i)
+            media_group.attach_photo(last_photo)
 
-        media_group[-1] = media_group.attach_photo(types.InputMediaPhoto(
-            i, caption=f"{data['title_for_channel']}\n\n{data['text_for_channel']}"))
+        if last_photo:
+            last_photo.caption = f"{data['title_for_channel']}\n\n{data['text_for_channel']}"
+            media_group[-1] = last_photo
 
         print(media_group[-1])
         await bot.send_media_group(chat_id=message.from_user.id, media=media_group)
@@ -71,15 +74,16 @@ async def finish_load_photos(message: types.Message, state: FSMContext):
         await SendToChannelFSM.next()
 
 
+
 async def load_submit(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        if message.text.lower() == 'да':
-            await bot.send_media_group(chat_id=CHANNEL_ID, media=media_group)
-            await state.finish()
-            media_group.clean()
-        else:
-            await message.answer("Отмена!")
-            await state.finish()
+    if message.text.lower() == 'да':
+        await bot.send_media_group(chat_id=CHANNEL_ID, media=media_group)
+        await state.finish()
+        media_group.clean()
+        await message.answer('Готово!', reply_markup=buttons.start)
+    else:
+        await message.answer("Отмена!")
+        await state.finish()
 
 
 async def cancel_reg(message: types.Message, state: FSMContext):
@@ -91,7 +95,7 @@ async def cancel_reg(message: types.Message, state: FSMContext):
 
 def register_send_to_channel(dp: Dispatcher):
     dp.register_message_handler(cancel_reg, Text(equals='Отмена', ignore_case=True), state='*')
-    dp.register_message_handler(fsm_start, commands=['рассылка'])
+    dp.register_message_handler(fsm_start, commands=['Вручную!'])
 
     dp.register_message_handler(load_title, state=SendToChannelFSM.title)
     dp.register_message_handler(load_text, state=SendToChannelFSM.text)

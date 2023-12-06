@@ -4,14 +4,15 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from config import bot, Admins, Director, POSTGRES_URL
+import os
 from keyboards import buttons
-from aiogram.types import InputFile
+
 
 async def get_conn():
     conn = await asyncpg.connect(user='postgres', password='123',
                                  database='osor_tg_bot', host='localhost')
     return conn
+
 
 # =======================================================================================================================
 
@@ -33,6 +34,8 @@ async def choose_city(message: types.Message, state: FSMContext):
 
 
 """Вывод категорий"""
+
+
 async def load_category(message: types.Message, state: FSMContext):
     category_name = message.text
     data = await state.get_data()
@@ -54,19 +57,24 @@ async def load_category(message: types.Message, state: FSMContext):
         return
 
     for category in categories:
-        print(category['photo'])
-        photo_id = category['photo']
-        await bot.send_photo(chat_id=message.from_user.id,
-                             photo=photo_id,
-                             caption=f"Товар: {category['name_']}\n"
-                                     f"Информация о товаре: {category['info_product']}\n"
-                                     f"Дата прихода: {category['date_coming']}\n"
-                                     f"Цена: {category['price']}\n"
-                                     f"Город: {category['city']}\n"
-                                     f"Категория: {category['category']}\n"
-                                     f"Артикул: {category['articul']}\n"
-                                     f"Количество: {category['quantity']}")
+        photo_path = category[9]
 
+        if not os.path.exists(photo_path):
+            print(f"Файл не найден: {photo_path}")
+            continue
+        try:
+            with open(photo_path, 'rb') as photo:
+                await message.answer_photo(photo=photo, caption=f"Товар: {category[1]}\n"
+                                                                f"Информация о товаре: {category[2]}\n"
+                                                                f"Цена: {category[4]}\n"
+                                                                f"Город: {category[5]}\n"
+                                                                f"Категория: {category[6]}\n"
+                                                                f"Артикул: {category[7]}\n",
+                                           reply_markup=buttons.start)
+                await state.finish()
+        except Exception as e:
+            print(f"Ошибка при открытии файла {photo_path}: {e}")
+            continue
 
 
 async def cancel_reg(message: types.Message, state: FSMContext):
