@@ -45,7 +45,9 @@ async def load_contact(message: types.Message, state: FSMContext):
 async def load_size(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['size'] = message.text
-    await message.answer("Данные о товаре")
+    await message.answer(f"Данные о товаре:\n"
+                         f"Артикуль товара: {data['articule']}\n"
+                         f"Размер: {data['size']}")
     await message.answer("Всё правильно?", reply_markup=buttons.submit_markup)
     await OrderFSM.next()
 
@@ -77,8 +79,8 @@ async def cancel_reg(message: types.Message, state: FSMContext):
 
 
 def register_order(dp: Dispatcher):
-    dp.register_message_handler(cancel_reg, Text(equals='Отмена', ignore_case=True), state='*')
-    dp.register_message_handler(order_FSM_start, commands=['Заказать'])
+    dp.register_message_handler(cancel_reg, Text(equals='/cancel', ignore_case=True), state='*')
+    dp.register_message_handler(order_FSM_start, commands=['Заказать', 'order'])
     dp.register_message_handler(load_articul, state=OrderFSM.articul)
     dp.register_message_handler(load_contact, state=OrderFSM.contact, content_types=['contact'])
     dp.register_message_handler(load_size, state=OrderFSM.size)

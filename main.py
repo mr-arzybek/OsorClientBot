@@ -4,6 +4,7 @@ from handlers.FSM import review_client, send_to_tg_channel, all_products, Button
 # ===========================================================================
 from config import dp, bot, Admins
 from handlers.commands import register_start
+from handlers import start
 from keyboards import buttons
 from config import data_b
 from db import db_orm
@@ -25,6 +26,7 @@ async def on_shutdown(_):
 
 
 # ==================================================================================================================
+start.register_start(dp)
 db_orm.sql_get_ORM(dp)
 review_client.register_review(dp)
 send_to_tg_channel.register_send_to_channel(dp)

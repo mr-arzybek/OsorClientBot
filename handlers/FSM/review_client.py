@@ -135,9 +135,9 @@ async def cancel_reg(message: types.Message, state: FSMContext):
 
 def register_review(dp: Dispatcher):
     dp.register_message_handler(
-        cancel_reg, Text(equals="Отмена", ignore_case=True), state="*"
+        cancel_reg, Text(equals="/cancel", ignore_case=True), state="*"
     )
-    dp.register_message_handler(fsm_start, commands=["Написать_отзыв"])
+    dp.register_message_handler(fsm_start, commands=["Написать_отзыв", "review"])
 
     dp.register_message_handler(load_articule, state=review_fsm.articule)
     dp.register_message_handler(load_name, state=review_fsm.name)

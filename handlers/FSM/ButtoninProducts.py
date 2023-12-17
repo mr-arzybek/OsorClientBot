@@ -49,9 +49,8 @@ async def all_products(message: types.Message, state: FSMContext):
                                                                 f"Город: {product[5]}\n"
                                                                 f"Категория: {product[6]}\n"
                                                                 f"Артикул: {product[7]}\n",
-                                           reply_markup=InlineKeyboardMarkup().add(
-                                               InlineKeyboardButton(f"В канал! {product[0]}",
-                                                                    callback_data=f"Разослать {product[0]}")))
+                                           reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton(f"В канал! {product[0]}",
+                                                                                                        callback_data=f"Разослать {product[0]}")))
         except Exception as e:
             print(f"Ошибка при открытии файла {photo_path}: {e}")
             continue
@@ -60,8 +59,8 @@ async def all_products(message: types.Message, state: FSMContext):
 
 
     if len(products) == PRODUCTS_PER_PAGE:
-        await message.answer("Хотите посмотреть остальные товары?:", reply_markup=InlineKeyboardMarkup().add(
-            InlineKeyboardButton("Еще", callback_data="load_more")
+        await message.answer("Хотите посмотреть остальные товары ❓:", reply_markup=InlineKeyboardMarkup().add(
+            InlineKeyboardButton("Да!✅", callback_data="load_more")
         ))
 
 
@@ -100,7 +99,7 @@ async def complete_send_products(call: types.CallbackQuery):
                                                                                              f"Город: {product[5]}\n"
                                                                                              f"Категория: {product[6]}\n"
                                                                                              f"Артикул: {product[7]}\n",
-                                                    reply_markup=buttons.start)
+                                                    reply_markup=buttons.startForAdmins)
         except Exception as e:
             print(f"Ошибка при открытии файла {photo_path}: {e}")
             continue

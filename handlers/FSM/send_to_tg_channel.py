@@ -94,7 +94,7 @@ async def cancel_reg(message: types.Message, state: FSMContext):
 
 
 def register_send_to_channel(dp: Dispatcher):
-    dp.register_message_handler(cancel_reg, Text(equals='Отмена', ignore_case=True), state='*')
+    dp.register_message_handler(cancel_reg, Text(equals='/cancel', ignore_case=True), state='*')
     dp.register_message_handler(fsm_start, commands=['Вручную!'])
 
     dp.register_message_handler(load_title, state=SendToChannelFSM.title)
