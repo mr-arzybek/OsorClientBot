@@ -1,11 +1,22 @@
 version: '3.3'
 
 services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: osor_tg_bot
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+
   bot:
-    container_name: osor_client_bot
-    restart: always
     build:
       context: .
-      dockerfile: Dockerfile
-    volumes:
-      - /opt/osor_client_bot
+    depends_on:
+      - db
+    environment:
+      TOKEN: "TOKEN"
+      ip: "ip"
+      PostgresUser: "PostgresUser"
+      PostgresPassword: "PostgresPassword"
+      DATABASE: "OSOR_DB"
+      POSTGRES_URL: "postgresql://postgres:123@db:5432/osor_tg_bot"
